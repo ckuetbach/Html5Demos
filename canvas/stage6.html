@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+
+<script type="text/javascript" src="jquery-1.6.4.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="600" height="600" style="width:600px;height:600px;border:1px solid red"></canvas>
+<script type="text/javascript">
+
+// Create the Canvas-Context
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+var startY=100;
+var startY=100;
+var currentX=100;
+var currentY=100;
+var startZoom=1;
+var currentZoom = startZoom;
+var iDist=1;
+
+// Only important for the mouse
+var pressed = false;
+
+// Fill the blue square
+function paintSquare(x,y,zoom){
+	ctx.clearRect(0,0,600,600);
+	ctx.fillStyle = '#0000ff';
+	//console.log(x + ", " + y+ ", "+ zoom)
+	ctx.fillRect(x,y,50*zoom,50*zoom);	
+	
+}
+
+// initial pain to the top-left
+paintSquare(100,100,startZoom);
+
+//The code
+function onStart(event){
+	pressed = true;
+	var pageX = event.pageX;
+	var pageY = event.pageY;
+	if(event.touches){
+		pageX = event.touches[0].pageX;
+		pageY = event.touches[0].pageY;
+	}
+	
+	
+	startX = pageX - currentX;
+	startY = pageY - currentY;
+
+	
+	if(event.touches && event.touches.length > 1){
+		var touch1 = event.touches[0];
+		var touch2 = event.touches[1];
+		var dX = touch2.pageX - touch1.pageX;
+		var dY = touch2.pageY - touch1.pageY;
+		iDist = Math.sqrt(Math.pow(dX,2)+Math.pow(dY,2));	
+		startZoom = currentZoom;
+	}
+}
+
+// Moving the square
+function onMove(event){
+	if(pressed){
+		var pageX = event.pageX;
+		var pageY = event.pageY;
+		if(event.touches){
+			pageX = event.touches[0].pageX;
+			pageY = event.touches[0].pageY;
+		}
+	
+		
+		if(event.touches && event.touches.length > 1){
+			var touch1 = event.touches[0];
+			var touch2 = event.touches[1];
+			var dX = touch2.pageX - touch1.pageX;
+			var dY = touch2.pageY - touch1.pageY;
+			var vDist = Math.sqrt(Math.pow(dX,2)+Math.pow(dY,2));	
+			currentZoom = startZoom * (vDist/iDist);
+		}
+		
+		currentX = (pageX- startX);
+		currentY = (pageY - startY);
+		paintSquare(currentX, currentY, currentZoom);
+	
+	}
+
+}
+
+function onEnd(event){
+	pressed=false;
+	
+}
+
+
+
+function preventDefault(event){
+	event.preventDefault();	
+}
+
+// Bind the event-handler for drawing
+var element = document.getElementById('canvas');
+element.addEventListener("touchstart", onStart, false);
+element.addEventListener("touchmove", onMove, false);
+element.addEventListener("touchend", onEnd, false);
+
+element.addEventListener("mousedown", onStart, false);
+element.addEventListener("mousemove", onMove, false);
+element.addEventListener("mouseup", onEnd, false);
+
+// Just ignore everything else, to prevent page scrolling
+$('body').bind('touchmove', preventDefault);
+$('body').bind('touchstart', preventDefault);
+$('body').bind('touchend', preventDefault);
+</script>
+
+</body>
+</html>

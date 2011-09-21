@@ -1,0 +1,56 @@
+<html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+
+<script type="text/javascript" src="jquery-1.6.4.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="300" height="300" style="width:300px;height:300px;border:1px solid red"></canvas>
+<script type="text/javascript">
+
+// Create the Canvas-Context
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+
+// Fill the blue square
+ctx.fillStyle = '#0000ff';
+ctx.fillRect(0,0,50,50);
+
+//The code
+function onStart(event){
+	console.log(event);	
+}
+
+function onMove(event){
+	//console.log(event); // works, but verbose	
+}
+
+function onEnd(event){
+	console.log(event);	
+}
+
+function preventDefault(event){
+	event.preventDefault();	
+}
+
+// Bind the event-handler for drawing
+$('#canvas').bind('mousedown',onStart);
+$('#canvas').bind('mousemove',onMove);
+$('#canvas').bind('mouseup',onEnd);
+
+// Touchdevice-Stuff
+
+$('#canvas').bind('touchstart',onStart);
+$('#canvas').bind('touchmove',onMove);
+$('#canvas').bind('touchend',onEnd);
+
+// Just ignore everything else, to prevent page scrolling
+$('body').bind('touchmove', preventDefault);
+$('body').bind('touchstart', preventDefault);
+$('body').bind('touchend', preventDefault);
+</script>
+
+</body>
+</html>

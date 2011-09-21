@@ -1,0 +1,70 @@
+<html>
+<head>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0;">
+
+<script type="text/javascript" src="jquery-1.6.4.js"></script>
+</head>
+<body>
+<canvas id="canvas" width="300" height="300" style="width:300px;height:300px;border:1px solid red"></canvas>
+<script type="text/javascript">
+
+// Create the Canvas-Context
+var canvas = document.getElementById('canvas');
+var ctx = canvas.getContext('2d');
+
+
+// Fill the blue square
+function paintSquare(x,y){
+	ctx.clearRect(0,0,300,300);
+	ctx.fillStyle = '#0000ff';
+	ctx.fillRect(x,y,50,50);	
+}
+// initial pain to the top-left
+
+paintSquare(0,0);
+
+//The code
+function onStart(event){
+	
+}
+
+// Noving the square
+function onMove(event){	
+	// mouse
+	var posX = event.pageX;
+	var posY = event.pageY;
+	// touch
+	if(event.touches){
+		posX = event.touches[0].pageX;
+		posY = event.touches[0].pageY;
+	}
+	paintSquare(posX,posY);
+}
+
+function onEnd(event){
+
+}
+
+function preventDefault(event){
+	event.preventDefault();	
+}
+
+// Bind the event-handler for drawing
+var element = document.getElementById('canvas');
+element.addEventListener("touchstart", onStart, false);
+element.addEventListener("touchmove", onMove, false);
+element.addEventListener("touchend", onEnd, false);
+
+element.addEventListener("mousedown", onStart, false);
+element.addEventListener("mousemove", onMove, false);
+element.addEventListener("mouseup", onEnd, false);
+
+// Just ignore everything else, to prevent page scrolling
+$('body').bind('touchmove', preventDefault);
+$('body').bind('touchstart', preventDefault);
+$('body').bind('touchend', preventDefault);
+</script>
+
+</body>
+</html>
